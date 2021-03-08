@@ -2,6 +2,7 @@
 #include <string>
 #include "defn.h"
 #include <typeinfo>
+#include <cstring>
 
 using namespace std;
 
@@ -25,14 +26,12 @@ void inorder(struct bst *root)
 
 void inorder_insert(struct bst *root, float *max_heap)
 {
-
+	// static int pos = 0;
 	if(root == NULL)
 		return;
 	else
 	{
 		inorder_insert(root->left, max_heap);
-	
-	
 		max_heap[pos++] = root->record.price;
 		inorder_insert(root->right, max_heap);
 	}
@@ -101,20 +100,16 @@ int num_of_elements(struct bst *root)
 
 void tokenize(string line, string sep, string *str_ptr)
 {
-	const char* sepa = sep.c_str();
+    const char* sepa = sep.c_str();
 
-	char* token;
+    char* token;
 	char str[line.length()];
-	strcpy(str, line.c_str());
-	token = strtok(str, sepa);
+    strcpy(str, line.c_str());
+    char *rest = str;
 
-	int i=0;
-	while (token != NULL)
-	{
-		str_ptr[i] = token;
-		token = strtok(NULL, sepa);
-		i++;
-	}
+    int i=0;
+    while ((token = strtok_r(rest, sepa, &rest))) 
+        str_ptr[i++] = token;
 }
 
 struct parsed_query parse_query(string query)
@@ -123,10 +118,12 @@ struct parsed_query parse_query(string query)
 	string *scnd_str_ptr = new string[100];
 	struct parsed_query temp_pq;
 
+	// old_tokenize(query,"\"",frst_str_ptr);
 	tokenize(query,"\"",frst_str_ptr);
 	temp_pq.category_name = frst_str_ptr[1];
 	string to_tokenize = frst_str_ptr[0];
 	
+	// old_tokenize(to_tokenize, " ", scnd_str_ptr);
 	tokenize(to_tokenize, " ", scnd_str_ptr);
 	if(scnd_str_ptr[0] == "print-apps")
 	{
@@ -146,7 +143,7 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 	if(pq.query_type == 2)
 	{
 		cout << "Category";
-	
+		// cout << pq.query_type << "\t" << pq.category_name <<endl;
 		int flag = 0;
 		for(int i=0;i<n_categories;i++)
 		{
@@ -155,26 +152,29 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 				flag = 1;
 				if(app_store[i].root == NULL)
 				{
-				
-					cout << " \""<<pq.category_name<<"\" no apps found."<< endl;
+					// cout << "\nCategory "<<pq.category_name<<" no apps found."<< endl;
+					cout << " \""<<pq.category_name<<"\" no apps found.";
 				}
 				else
 				{
-				
+					// cout << "\nCategory: "<<pq.category_name;
 					cout <<": \""<<pq.category_name<<"\""<<endl;
 					//get the number of elements in the tree
 					int count = num_of_elements(app_store[i].root);
+					// cout << "\tLALALALALALA number of apps in "<<pq.category_name<<":\t" << count << endl;
+
 					float *max_heap = new float[count];
-				
+
 					pos = 0;
 					inorder_insert(app_store[i].root, max_heap);
 					pos=0;
+
 					build_max_heap(max_heap,count);
-				
+					// cout << "\tone: " << max_heap[0] << "\ttwo: " << max_heap[1] << "\tthree: " << max_heap[2] << "\tfour: " << max_heap[3]<<endl;
 					float max_price = max_heap[0];
 					inorder_print(app_store[i].root, max_price);
 					delete[] max_heap;
-				
+					// delete pos;
 				}
 			}
 		}
@@ -184,8 +184,8 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 	{
 		cout << "Category";
 		int flag = 0;
-	
-	
+		// cout << pq.query_type << "\t" << pq.category_name <<endl;
+		// if(app_store)
 		for(int i=0;i<n_categories;i++)
 		{
 			if(pq.category_name == app_store[i].category)
@@ -193,12 +193,12 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 				flag = 1;
 				if(app_store[i].root == NULL)
 				{
-				
-					cout << " \""<<pq.category_name<<"\" no apps found."<< endl;
+					// cout << "\nCategory "<<pq.category_name<<" no apps found."<< endl;
+					cout << " \""<<pq.category_name<<"\" no apps found.";
 				}
 				else
 				{
-				
+					// cout << "\nCategory: "<<pq.category_name<<endl;
 					cout <<": \""<<pq.category_name<<"\""<<endl;
 					//print by traversing inorder
 					inorder(app_store[i].root);
@@ -207,8 +207,8 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 		}
 		if(flag == 0)
 		{
-		
-			cout <<"\""<<pq.category_name<<"\" not found."<<endl;
+			// cout << "\nCategory "<<pq.category_name<<" not found."<<endl;
+			cout <<"\""<<pq.category_name<<"\" not found.";
 		}
 	}
 }
@@ -219,12 +219,12 @@ struct bst* insert(struct bst *node, struct app_info ai)
 	{
 		if(ai.app_name <= node->record.app_name)
 		{
-		
+			// cout << "LEFT\t";
 			node->left = insert(node->left, ai);
 		}
 		else if(ai.app_name > node->record.app_name)
 		{
-		
+			// cout << "RIGHT\t";
 			node->right = insert(node->right, ai);
 		}
 	}
@@ -239,11 +239,12 @@ struct bst* insert(struct bst *node, struct app_info ai)
 	return node;
 }
 
+// void insertIntoBST(struct bst *node, )
 void fillBSTData(struct app_info *arr_ai, struct categories *app_store, int m_apps, int n_categories)
 {
 	for(int i=0;i<m_apps;i++)
 	{
-	
+		// cout << "\t" << arr_ai[i].app_name << endl;
 		for(int j=0;j<n_categories;j++)
 		{
 			if(arr_ai[i].category ==  app_store[j].category)
@@ -251,7 +252,7 @@ void fillBSTData(struct app_info *arr_ai, struct categories *app_store, int m_ap
 				struct bst *temp_bst;
 				if(app_store[j].root == NULL)
 				{
-				
+					// cout << "This is the base:\t";
 					temp_bst = new struct bst;
 					temp_bst->record = arr_ai[i];
 					temp_bst->left = NULL;
@@ -261,16 +262,16 @@ void fillBSTData(struct app_info *arr_ai, struct categories *app_store, int m_ap
 				}
 				else
 				{
-				
+					// cout << "This is not at base:\t";
 					temp_bst = new struct bst;
 					temp_bst = insert(app_store[j].root, arr_ai[i]);
-				
+					// cout << "\ninserted "<< arr_ai->app_name << endl;
 					temp_bst = NULL;
 				}
 				delete temp_bst;
 			}
 		}
-	
+		// cout << "app done" << endl<<endl;
 	}
 }
 
@@ -307,12 +308,11 @@ int main()
 
 	struct bst *temp_bst;
 	fillBSTData(arr_ai, app_store,m_apps,n_categories);
-
 	int q_queries;
 	cin>> q_queries;
 	cin >> ws;
 	string queries_array[q_queries];
-
+	// cout << "\n\n------------------- OUTPUT ------------------------ \n\n";
 	for(int i=0;i<q_queries;i++)
 	{
 		getline(cin, queries_array[i]);
@@ -321,6 +321,8 @@ int main()
 			cout <<"\n";
 		cout << queries_array[i]<<endl;
 		execute_query(queries_array[i], pq, app_store, n_categories);
+		if(i == q_queries-1)
+			cout << endl;
 	}
 	delete[] arr_ai;
 	delete[] app_store;
