@@ -107,7 +107,7 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 
 					build_max_heap(max_heap,count);
 					// cout << "\tone: " << max_heap[0] << "\ttwo: " << max_heap[1] << "\tthree: " << max_heap[2] << "\tfour: " << max_heap[3]<<endl;
-					float max_price = max_heap[0];
+					float max_price = ret_maximum(max_heap);
 					inorder_print(app_store[i].root, max_price);
 					delete[] max_heap;
 					// delete pos;

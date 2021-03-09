@@ -45,7 +45,7 @@ struct app_info{
   std::string version; // Version number
   float size; // Size of the application
   std::string units; // GB or MB
-  float price; // Price in $ of the application
+  float price; // Price in $ of the applicationn
 };
 
 struct bst{ // A binary search tree
