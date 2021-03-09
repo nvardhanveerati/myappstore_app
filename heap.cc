@@ -38,3 +38,8 @@ void build_max_heap(float *max_heap, int n)
 		maxHeapify(max_heap,i,n);
 	}
 }
+
+float ret_maximum(float *max_heap)
+{
+	return max_heap[0];
+}

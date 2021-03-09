@@ -23,6 +23,7 @@ int main()
 	cin >> ws;
 	//for now
 	struct app_info *arr_ai = new struct app_info[m_apps];
+	struct bst *arr_bst = new struct bst[m_apps];
 	//end
 	for(int i=0;i<m_apps;i++)
 	{
@@ -36,10 +37,16 @@ int main()
 
 		struct app_info ai = {s[0], s[1], s[2], stof(s[3]), s[4], stof(s[5])};
 		arr_ai[i] = ai;
+		arr_bst[i].record = arr_ai[i];
+		arr_bst[i].left = NULL;
+		arr_bst[i].right = NULL;
 	}
 
-	struct bst *temp_bst;
-	fillBSTData(arr_ai, app_store,m_apps,n_categories);
+	// fillBSTData(arr_ai, app_store,m_apps,n_categories);
+	for(int i=0;i<m_apps;i++)
+	{
+		fillBST(&arr_bst[i], app_store,n_categories);
+	}
 	// dont store it as an array of app_info, but push it into BST as soon as you read it.
 	// insert into BST
 	int q_queries;
@@ -65,6 +72,7 @@ int main()
 	// Max heap
 	// report
 	// delete temp_bst;
+	delete[] arr_bst;
 	delete[] arr_ai;
 	delete[] app_store;
 	return 0;

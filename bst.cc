@@ -55,63 +55,65 @@ void inorder_print(struct bst *root, float max_val)
 	}
 }
 
-struct bst* insert(struct bst *node, struct app_info ai)
+void new_insert(struct bst *node, struct app_info ai, struct bst *ttemp)
 {
 	if(node != NULL)
 	{
 		if(ai.app_name <= node->record.app_name)
 		{
 			// cout << "LEFT\t";
-			node->left = insert(node->left, ai);
+			new_insert(node->left, ai, ttemp);
 		}
 		else if(ai.app_name > node->record.app_name)
 		{
 			// cout << "RIGHT\t";
-			node->right = insert(node->right, ai);
+			new_insert(node->right, ai, ttemp);
 		}
 	}
 	if(node == NULL)
 	{
-		struct bst *ttemp = new struct bst;
 		ttemp->record = ai;
 		ttemp->left = NULL;
 		ttemp->right = NULL;
-		return ttemp;
 	}
-	return node;
 }
 
-void fillBSTData(struct app_info *arr_ai, struct categories *app_store, int m_apps, int n_categories)
+void fillBST(struct bst *temp_bst, struct categories* app_store, int n_categories)
 {
-	for(int i=0;i<m_apps;i++)
+	string name_tempapp = temp_bst->record.app_name;
+	for(int i=0;i<n_categories;i++)
 	{
-		// cout << "\t" << arr_ai[i].app_name << endl;
-		for(int j=0;j<n_categories;j++)
+		if(temp_bst->record.category == app_store[i].category)
 		{
-			if(arr_ai[i].category ==  app_store[j].category)
+			if(app_store[i].root == NULL)
 			{
-				struct bst *temp_bst;
-				if(app_store[j].root == NULL)
+				app_store[i].root = temp_bst;
+				return;
+			}
+			struct bst *root = app_store[i].root;
+			string name_rootapp;
+			while(root)
+			{
+				name_rootapp = root->record.app_name;
+				if(name_tempapp > name_rootapp)
 				{
-					// cout << "This is the base:\t";
-					temp_bst = new struct bst;
-					temp_bst->record = arr_ai[i];
-					temp_bst->left = NULL;
-					temp_bst->right = NULL;
-					app_store[j].root = temp_bst;
-					temp_bst = NULL;
+					if(root->right == NULL)
+					{
+						root->right = temp_bst;
+						break;
+					}
+					root = root->right;
 				}
 				else
 				{
-					// cout << "This is not at base:\t";
-					temp_bst = new struct bst;
-					temp_bst = insert(app_store[j].root, arr_ai[i]);
-					// cout << "\ninserted "<< arr_ai->app_name << endl;
-					temp_bst = NULL;
+					if(root->left == NULL)
+					{
+						root->left = temp_bst;
+						return;
+					}
+					root = root->left;
 				}
-				delete temp_bst;
 			}
 		}
-		// cout << "app done" << endl<<endl;
 	}
 }
