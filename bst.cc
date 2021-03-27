@@ -1,4 +1,5 @@
 #include "defn.h"
+#include "utils.h"
 
 #include <iostream>
 #include <string>
@@ -6,11 +7,14 @@
 #include <cstring>
 
 using namespace std;
-static int pos = 0;
-struct parsed_query{
-	int query_type;
-	string category_name;
-};
+
+// static int pos = 0;
+// struct parsed_query{
+// 	int query_type;
+// 	string category_name;
+// };
+
+// Performs and inorder traversal and prints the nodes
 void inorder(struct bst *root)
 {
 	if(root == NULL)
@@ -18,27 +22,25 @@ void inorder(struct bst *root)
 	else
 	{
 		inorder(root->left);
-		// cout << "\t" << root->record.app_name<<endl;
 		cout << "\n\t" << root->record.app_name;
 		inorder(root->right);
 	}
 }
 
-void inorder_insert(struct bst *root, float *max_heap)
+// Performs inorder traversal and assigns the nodes to the array
+void inorder_insert(struct bst *root, float *max_heap, int &pos)
 {
-	// static int pos = 0;
 	if(root == NULL)
 		return;
 	else
 	{
-		inorder_insert(root->left, max_heap);
-		// cout << "\t" << root->record.app_name<<endl;
-		// cout << "\t"<<pos<<") "<<root->record.price << "\n";
+		inorder_insert(root->left, max_heap, pos);
 		max_heap[pos++] = root->record.price;
-		inorder_insert(root->right, max_heap);
+		inorder_insert(root->right, max_heap, pos);
 	}
 }
 
+// Prints the app name by traversing through the BST inorder
 void inorder_print(struct bst *root, float max_val)
 {
 	if(root == NULL)
@@ -48,12 +50,12 @@ void inorder_print(struct bst *root, float max_val)
 		inorder_print(root->left, max_val);
 		if(root->record.price == max_val)
 		{
-			// cout << "\t" << root->record.app_name <<endl;   
 			cout << "\n\t" << root->record.app_name;   
 		}
 		inorder_print(root->right, max_val);
 	}
 }
+
 
 void new_insert(struct bst *node, struct app_info ai, struct bst *ttemp)
 {
@@ -61,12 +63,10 @@ void new_insert(struct bst *node, struct app_info ai, struct bst *ttemp)
 	{
 		if(ai.app_name <= node->record.app_name)
 		{
-			// cout << "LEFT\t";
 			new_insert(node->left, ai, ttemp);
 		}
 		else if(ai.app_name > node->record.app_name)
 		{
-			// cout << "RIGHT\t";
 			new_insert(node->right, ai, ttemp);
 		}
 	}
@@ -78,6 +78,7 @@ void new_insert(struct bst *node, struct app_info ai, struct bst *ttemp)
 	}
 }
 
+// Inserts the BST data into the app store
 void fillBST(struct bst *temp_bst, struct categories* app_store, int n_categories)
 {
 	string name_tempapp = temp_bst->record.app_name;
@@ -100,7 +101,7 @@ void fillBST(struct bst *temp_bst, struct categories* app_store, int n_categorie
 					if(root->right == NULL)
 					{
 						root->right = temp_bst;
-						break;
+						return ;
 					}
 					root = root->right;
 				}
@@ -109,7 +110,7 @@ void fillBST(struct bst *temp_bst, struct categories* app_store, int n_categorie
 					if(root->left == NULL)
 					{
 						root->left = temp_bst;
-						return;
+						return ;
 					}
 					root = root->left;
 				}

@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #define	CAT_NAME_LEN	25
 #define	APP_NAME_LEN	50

@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
-// #include "defn.h"
 #include <typeinfo>
 #include <cstring>
 
 using namespace std;
 
+// Takes in an array and max heapifies it
 void maxHeapify(float *max_heap, int i, int n)
 {
 	int largest = i;
@@ -31,6 +31,7 @@ void maxHeapify(float *max_heap, int i, int n)
 	}
 }
 
+// Builds a max heap from a given array
 void build_max_heap(float *max_heap, int n)
 {
 	for(int i=n/2;i>=0;i--)
@@ -39,6 +40,7 @@ void build_max_heap(float *max_heap, int n)
 	}
 }
 
+// Returns the maximum value of a Max Heap
 float ret_maximum(float *max_heap)
 {
 	return max_heap[0];

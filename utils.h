@@ -1,5 +1,6 @@
-#include "bst.cc"
-#include "heap.cc"
+#pragma once
+#include "bst.h"
+#include "heap.h"
 
 #include <iostream>
 #include <string>
@@ -7,6 +8,13 @@
 #include <cstring>
 
 using namespace std;
+
+static int pos =0;
+
+struct parsed_query{
+	int query_type;
+	string category_name;
+};
 
 int num_of_elements(struct bst *root);
 
