@@ -27,6 +27,67 @@ void inorder(struct bst *root)
 	}
 }
 
+
+void range_inorder_checker_price(struct bst *root, float low, float high, int &count)
+{
+	if(root == NULL)
+		return;
+	else
+	{
+		range_inorder_checker_price(root->left, low, high, count);
+		if(root->record.price >= low && root->record.price <= high)
+		{
+			count++;
+		}
+		range_inorder_checker_price(root->right, low, high, count);
+	}
+}
+
+void range_inorder_price(struct bst *root, float low, float high)
+{
+	if(root == NULL)
+		return;
+	else
+	{
+		range_inorder_price(root->left, low, high);
+		if(root->record.price >= low && root->record.price <= high)
+		{
+			cout << "\n\t" << root->record.app_name;
+		}
+		range_inorder_price(root->right, low, high);
+	}
+}
+
+void range_inorder_checker_app(struct bst *root, string low, string high, int &count)
+{
+	if(root == NULL)
+		return;
+	else
+	{
+		range_inorder_checker_app(root->left, low, high, count);
+		if(root->record.app_name >= low && root->record.app_name <= high)
+		{
+			count++;
+		}
+		range_inorder_checker_app(root->right, low, high, count);
+	}
+}
+
+void range_inorder_app(struct bst *root, string low, string high)
+{
+	if(root == NULL)
+		return;
+	else
+	{
+		range_inorder_app(root->left, low, high);
+		if(root->record.app_name >= low && root->record.app_name <= high)
+		{
+			cout << "\n\t" << root->record.app_name;
+		}
+		range_inorder_app(root->right, low, high);
+	}
+}
+
 // Performs inorder traversal and assigns the nodes to the array
 void inorder_insert(struct bst *root, float *max_heap, int &pos)
 {

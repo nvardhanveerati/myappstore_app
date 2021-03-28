@@ -53,19 +53,29 @@ int main()
 	{
 		hash_table_store[i] = NULL;
 	}
+	// for(int i=0;i<m_apps;i++)
+	// {
+	// 	hash_table_entries[i].app_name = arr_ai[i].app_name;
+	// 	hash_table_entries[i].app_node = NULL;
+	// 	hash_table_entries[i].next = NULL;
+	// }
 	for(int i=0;i<m_apps;i++)
 	{
-		hash_table_entries[i].app_name = arr_ai[i].app_name;
-		hash_table_entries[i].app_node = NULL;
-		hash_table_entries[i].next = NULL;
-	}
-	for(int i=0;i<m_apps;i++)
-	{
-		cout << "\t"<< hash_table_entries[i].app_name << endl;
+		// cout << "\tTHIS "<< arr_bst[i].record.app_name << endl;
 		fillBST(&arr_bst[i], app_store,n_categories);
 		fillHashTable(&arr_bst[i], hash_table_store, hash_table_entries[i], hash_table_size);
 	}
 	// cout << "\t"<< arr_bst[0].left->record.app_name << endl;
+	// cout << endl << hash_table_store[0]->app_name << endl;
+	// cout << endl << hash_table_store[0]->next->app_name << endl;
+	// cout << endl << hash_table_store[0]->next->next->app_name << endl;
+	// cout << endl << hash_table_store[0]->next->next->next->app_name << endl;
+	// cout << endl << hash_table_store[0]->app_node->record.app_name << endl;
+	
+	// cout << endl << hash_table_store[6]->app_name << endl;
+	// cout << endl << hash_table_store[8]->app_name << endl;
+	// cout << endl << hash_table_store[9]->app_name << endl;
+
 	int q_queries;
 	cin>> q_queries;
 	cin >> ws;
@@ -74,13 +84,13 @@ int main()
 	for(int i=0;i<q_queries;i++)
 	{
 		getline(cin, queries_array[i]);
-		// struct parsed_query pq = parse_query(queries_array[i]);
-		// if(i!=0)
-        //     cout << endl;
-        // cout << queries_array[i]<<endl;
-		// execute_query(queries_array[i], pq, app_store, n_categories);
-		// if(i != q_queries-1)
-		// 	cout << endl;
+		struct parsed_query pq = parse_query(queries_array[i]);
+		if(i!=0)
+            cout << endl;
+		// cout << "\t"<<pq.query_type << "|"<<pq.category_name<<"|"<<pq.low<<"|m"<<pq.high<< endl;
+		execute_query(queries_array[i], pq, app_store, n_categories);
+		if(i != q_queries-1)
+			cout << endl;
 	}
 	delete[] hash_table_entries;
 	delete[] hash_table_store;

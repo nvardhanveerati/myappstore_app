@@ -14,6 +14,8 @@ static int pos =0;
 struct parsed_query{
 	int query_type;
 	string category_name;
+	string low;
+	string high;
 };
 
 int num_of_elements(struct bst *root);
