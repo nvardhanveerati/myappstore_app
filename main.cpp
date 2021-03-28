@@ -88,7 +88,7 @@ int main()
 		if(i!=0)
             cout << endl;
 		// cout << "\t"<<pq.query_type << "|"<<pq.category_name<<"|"<<pq.low<<"|m"<<pq.high<< endl;
-		execute_query(queries_array[i], pq, app_store, n_categories);
+		execute_query(queries_array[i], pq, app_store, n_categories, hash_table_store, hash_table_size);
 		if(i != q_queries-1)
 			cout << endl;
 	}

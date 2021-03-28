@@ -27,6 +27,22 @@ void inorder(struct bst *root)
 	}
 }
 
+void free_apps_inorder(struct bst* root)
+{
+	if(root == NULL)
+	{
+		return;
+	}
+	else
+	{
+		free_apps_inorder(root->left);
+		if(root->record.price == 0)
+		{
+			cout << "\n\t"<<root->record.app_name;
+		}
+		free_apps_inorder(root->right);
+	}
+}
 
 void range_inorder_checker_price(struct bst *root, float low, float high, int &count)
 {

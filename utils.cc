@@ -1,5 +1,6 @@
 #include "bst.h"
 #include "heap.h"
+#include "hash.h"
 
 #include <iostream>
 #include <string>
@@ -7,13 +8,6 @@
 #include <cstring>
 
 using namespace std;
-
-// static int pos =0;
-
-// struct parsed_query{
-// 	int query_type;
-// 	string category_name;
-// };
 
 // Returns the number of elements in the BST
 int num_of_elements(struct bst *root)
@@ -44,6 +38,114 @@ void tokenize(string line, string sep, string *str_ptr)
         str_ptr[i++] = token;
 }
 
+int app_present(struct hash_table_entry** hash_table_store, int hash_table_size, string app_name)
+{
+	int index = hash_function(app_name) % hash_table_size;
+	int out=0;
+	hash_table_entry *ht_node = hash_table_store[index];
+	while(ht_node != NULL)
+	{
+		if(ht_node->app_name == app_name)
+		{
+			out = 1;
+			break;
+		}
+		ht_node = ht_node->next;
+	}
+	return out;
+}
+
+struct bst* get_bst_node(struct hash_table_entry** hash_table_store, int hash_table_size, string app_name)
+{
+	int index = hash_function(app_name) % hash_table_size;
+	hash_table_entry *ht_node = hash_table_store[index];
+	while(ht_node!= NULL)
+	{
+		if(app_name == ht_node->app_name)
+		{
+			break;
+			// return ht_node->app_node;
+		}
+		ht_node = ht_node->next;
+	}
+	return ht_node->app_node;
+}
+
+struct bst* get_min_val_node(struct bst* root)
+{
+	bst* temp = root;
+    while (temp && temp->left != NULL)
+    {
+		temp = temp->left;
+	}
+	return temp;
+}
+
+void delete_hash_node(struct hash_table_entry** hash_table_store, int hash_table_size, string app_name)
+{
+	int index = hash_function(app_name) % hash_table_size;
+	hash_table_entry *ht_node = hash_table_store[index];
+
+	if(ht_node->app_name == app_name)
+	{
+		hash_table_store[index] = ht_node->next;
+		return;
+	}
+	hash_table_entry *ht_node_next;
+	while(ht_node->next != NULL)
+	{
+		ht_node_next = ht_node->next;
+		if(ht_node_next->app_name == app_name)
+		{
+			break;
+		}
+		ht_node = ht_node_next;
+	}
+	ht_node->next = ht_node_next->next;
+	return;
+}
+
+struct bst* delete_bst_node(struct bst* delete_node, struct bst* main_root)
+{
+	string delete_node_app = delete_node->record.app_name;
+	string main_root_app = main_root->record.app_name;
+	if(main_root == NULL)
+	{
+		return main_root;
+	}
+	if(delete_node_app > main_root_app)
+	{
+		main_root->right = delete_bst_node(delete_node, main_root->right);
+	}
+	else if(delete_node_app < main_root_app)
+	{
+		main_root->left = delete_bst_node(delete_node, main_root->left);
+	}
+	else
+	{
+		struct bst* temp;
+		if(main_root->left == NULL && main_root->right == NULL)
+		{
+			return NULL;
+		}
+
+		else if(main_root->left == NULL)
+		{
+			temp = main_root->right;
+			return temp;
+		}
+		else if(main_root->right == NULL)
+		{
+			temp = main_root->left;
+			return temp;
+		}
+		temp = get_min_val_node(main_root->right);
+		main_root->record = temp->record;
+		main_root->right = delete_bst_node(temp, main_root->right);
+	}
+	return main_root;
+}
+
 // returns metadata of the query
 struct parsed_query parse_query(string query)
 {
@@ -52,6 +154,7 @@ struct parsed_query parse_query(string query)
 	struct parsed_query temp_pq;
 
 	tokenize(query,"\"",frst_str_ptr);
+	cout << frst_str_ptr[0] << "ikkada";
 	// cout << "penta penta "<< frst_str_ptr[1] << endl;
 	// temp_pq.category_name = frst_str_ptr[1];
 	// string to_tokenize = frst_str_ptr[0];
@@ -133,13 +236,23 @@ struct parsed_query parse_query(string query)
 		// cout << "\thigh: " << temp_pq.high<<endl;
 		// cout << "\tlow: " << temp_pq.low<<endl;
 	}
+	else if(frst_str_ptr[0] == "delete ")
+	{
+		temp_pq.category_name = frst_str_ptr[1]; //category_name
+		temp_pq.query_type = 7;
+		temp_pq.high = temp_pq.low = frst_str_ptr[3]; //app_name
+		// cout << "\tone: "<< frst_str_ptr[1] << endl;
+		// cout << "\ttwo: "<< frst_str_ptr[2] << endl;
+		// cout << "\tthree: "<<frst_str_ptr[3] << endl;
+		// cout << "\tfour: "<<frst_str_ptr[4] << endl;
+	}
 	delete[] frst_str_ptr;
 	delete[] scnd_str_ptr;
 	return temp_pq;
 }
 
 // executes the query
-void execute_query(string query, struct parsed_query pq, struct categories *app_store, int n_categories)
+void execute_query(string query, struct parsed_query pq, struct categories *app_store, int n_categories, struct hash_table_entry** hash_table_store, int hash_table_size)
 {
 	if(pq.query_type == 2)
 	{
@@ -210,7 +323,6 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 			// cout <<"\tThis is where it is going wrong: " << pq.category_name<<endl;
 			if(pq.category_name == app_store[i].category)
 			{
-
 				flag = 0;
 				float high = stof(pq.high);
 				float low = stof(pq.low);
@@ -261,6 +373,85 @@ void execute_query(string query, struct parsed_query pq, struct categories *app_
 		if(flag == 1)
 		{
 			cout<<"Category "<< pq.category_name<< " not found.";
+		}
+	}
+	else if(pq.query_type == 1)
+	{
+		string app_name = pq.category_name;
+		cout << "\t" <<app_name << endl;
+		if(app_present(hash_table_store, hash_table_size, app_name) == 0)
+		{
+			cout << "Application "<<app_name<<" not found.";
+		}
+		else
+		{
+			struct bst* reqd_root = get_bst_node(hash_table_store, hash_table_size, app_name);
+			cout << "Found Application: "<<app_name<<endl;
+			cout << "\tCategory: " << reqd_root->record.category<<endl; // Name of category
+  			cout << "\tApp Name: " << reqd_root->record.app_name<<endl; // Name of the application
+  			cout << "\tVersion: " << reqd_root->record.version<<endl; // Version number
+  			cout << "\tSize: " << reqd_root->record.size<<endl; // Size of the application
+  			cout << "\tUnits: " << reqd_root->record.units<<endl; // GB or MB
+  			cout << "\tPrice: " << reqd_root->record.price<<endl; // Price in $ of the applicationn
+		}
+	}
+	else if(pq.query_type == 4)
+	{
+		int cat_flag = 0;
+		int cat_index = 0;
+		for(int i=0;i<n_categories;i++)
+		{
+			if(pq.category_name == app_store[i].category)
+			{
+				cat_flag = 1;
+				cat_index = i;
+			}
+		}
+		if(cat_flag == 0)
+		{
+			cout << "Category "<<pq.category_name<<" not found.";
+		}
+		else
+		{
+			struct bst* reqd_node = app_store[cat_index].root;
+			if(reqd_node == NULL)
+			{
+				cout << "Category "<<pq.category_name<<" no free apps found.";
+			}
+			else
+			{
+				cout << "Free apps in category: "<<pq.category_name;
+				free_apps_inorder(reqd_node);
+			}
+		}
+	}
+	else if(pq.query_type == 7)
+	{
+		cout << "Delete function Started"<<endl;
+		string app_name = pq.low;
+		if(app_present(hash_table_store, hash_table_size,app_name) == 0)
+		{
+			cout << "Application "<<app_name<<" not found in category "<<pq.category_name<<"; unable to delete";
+		}
+		else
+		{
+			int cat_flag = 0;
+			int cat_index = 0;
+			for(int i=0;i<n_categories;i++)
+			{
+				if(pq.category_name == app_store[i].category)
+				{
+					cat_flag = 1;
+					cat_index = i;
+				}
+			}
+			if(cat_flag!=0)
+			{
+				struct bst* main_root = app_store[cat_index].root;
+				struct bst* delete_node = get_bst_node(hash_table_store, hash_table_size, app_name);
+				// cout <<"\tdelete_node: "<<delete_node->record.app_name<<endl;
+				main_root = delete_bst_node( delete_node, main_root);
+			}
 		}
 	}
 }

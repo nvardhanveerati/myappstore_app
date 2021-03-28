@@ -18,6 +18,8 @@ using namespace std;
 
 void inorder(struct bst *root);
 
+void free_apps_inorder(struct bst* root);
+
 void inorder_insert(struct bst *root, float *max_heap, int &pos);
 
 void inorder_print(struct bst *root, float max_val);
