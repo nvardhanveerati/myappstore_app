@@ -1,0 +1,46 @@
+range "Weather" price 5.00 10.00
+Applications in Price Range ($5.00,$10.00) in Category: "Weather"
+	AccuWeather
+
+range "Weather" price 10.00 20.00
+No applications found in "Weather" for the given price range ($10.00,$20.00).
+
+range "Weather" app "A" "G"
+Applications in Range (A,G) in Category: "Weather"
+	AccuWeather
+
+range "Games" app "A" "G"
+No applications found in "Games" for the given range ("A","G").
+
+range "Games" price 5.00 10.00
+Category "Games" not found.
+
+report
+------------------------------------- BST ------------------------------------
+Category: Weather
+	Number of elements: 2
+	Height of BST: 1
+	Height of left subtree: 0
+	Height of right subtree: 0
+--------------------------------- Hash Table ---------------------------------
+	Length: 0    Number of Chains: 3
+	Length: 1    Number of Chains: 2
+Load Factor of this Hash Table: 0.40
+----------------------------- Compare query Times -----------------------------
+AccuWeather
+Found Application: "AccuWeather"
+	Category: Weather
+	Application Name: AccuWeather
+	Version: 8.5.4
+	Size: 60.30
+	Units: MB
+	Price: $6.00
+Found Application: "AccuWeather"
+	Category: Weather
+	Application Name: AccuWeather
+	Version: 8.5.4
+	Size: 60.30
+	Units: MB
+	Price: $6.00
+Duration of Process 1: 54.00 clock ticks
+Duration of Process 2: 37.00 clock ticks

@@ -1,0 +1,7 @@
+delete "Weather" "AccuWeather"
+
+
+delete "Games" "AccuWeather"
+
+
+delete "Social Networking" "AccuWeather"

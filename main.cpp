@@ -46,7 +46,7 @@ int main()
 		arr_bst[i].right = NULL;
 	}
 	int hash_table_size = size_of_hashtable(m_apps);
-	cout << "\tsize of hashtable: "<< hash_table_size<<endl;
+	// cout << "\tsize of hashtable: "<< hash_table_size<<endl;
 	struct hash_table_entry **hash_table_store = new struct hash_table_entry*[hash_table_size];
 	struct hash_table_entry *hash_table_entries = new struct hash_table_entry[m_apps];
 	for(int i=0;i<hash_table_size;i++)
@@ -87,6 +87,7 @@ int main()
 		struct parsed_query pq = parse_query(queries_array[i]);
 		if(i!=0)
             cout << endl;
+		cout << queries_array[i]<<endl;
 		// cout << "\t"<<pq.query_type << "|"<<pq.category_name<<"|"<<pq.low<<"|m"<<pq.high<< endl;
 		execute_query(queries_array[i], pq, app_store, n_categories, hash_table_store, hash_table_size);
 		if(i != q_queries-1)

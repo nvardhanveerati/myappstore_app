@@ -1,0 +1,22 @@
+2
+Social Networking
+Weather
+2
+Social Networking
+Instagram
+7.7.2
+22.2
+MB
+0.00
+Weather
+The Weather Live
+8.5.4
+60.3
+MB
+6.00
+5
+find app "Accuweather"
+find app "Instagram"
+find price free "Social Networking"
+find price free "Weather"
+find price free "Games"

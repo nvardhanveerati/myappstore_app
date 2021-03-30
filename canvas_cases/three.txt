@@ -1,0 +1,15 @@
+2
+Weather
+Social Networking
+1
+Weather
+AccuWeather
+8.54
+60.3
+MB
+6.00
+4
+delete "Weather" "AccuWeather"
+delete "Games" "AccuWeather"
+delete "Social Networking" "AccuWeather"
+no report

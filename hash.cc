@@ -36,7 +36,7 @@ void fillHashTable(struct bst *temp_bst, struct hash_table_entry **hash_table_st
     
     int index = hash_function(temp_app_name) % hash_table_size;
     // index = 0;
-    cout << "\t\t" << temp_app_name << ":\t"<<index<< "\t" <<  hash_function(temp_app_name) << endl;
+    // cout << "\t\t" << temp_app_name << ":\t"<<index<< "\t" <<  hash_function(temp_app_name) << endl;
 
     if(hash_table_store[index] == NULL)
     {

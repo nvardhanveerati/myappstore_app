@@ -35,3 +35,5 @@ void range_inorder_price(struct bst *root, float low, float high);
 void range_inorder_checker_app(struct bst *root, string low, string high, int &count);
 
 void range_inorder_app(struct bst *root, string low, string high);
+
+void report_inorder(struct bst* root, string app_name);

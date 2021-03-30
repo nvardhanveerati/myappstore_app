@@ -5,6 +5,7 @@
 #include <string>
 #include <typeinfo>
 #include <cstring>
+#include <iomanip>
 
 using namespace std;
 
@@ -24,6 +25,28 @@ void inorder(struct bst *root)
 		inorder(root->left);
 		cout << "\n\t" << root->record.app_name;
 		inorder(root->right);
+	}
+}
+
+void report_inorder(struct bst* root, string app_name)
+{
+	if(root==NULL)
+	{
+		return;
+	}
+	else
+	{
+		report_inorder(root->left, app_name);
+		if(root->record.app_name == app_name)
+		{
+			cout << "Found Application: \""<<app_name<<"\""<<endl;
+			cout << "\tCategory: " << root->record.category<<endl; // Name of category
+  			cout << "\tApplication Name: " << root->record.app_name<<endl; // Name of the application
+  			cout << "\tVersion: " << root->record.version<<endl; // Version number
+  			cout << "\tSize: " << root->record.size<<endl; // Size of the application
+  			cout << "\tUnits: " << root->record.units<<endl; // GB or MB
+  			cout << "\tPrice: $" << fixed<<setprecision(2)<<root->record.price<<endl; // Price in $ of the applicationn
+		}
 	}
 }
 

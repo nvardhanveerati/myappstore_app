@@ -1,0 +1,21 @@
+find app "Accuweather"
+Application "Accuweather" not found.
+
+find app "Instagram"
+Found Application: "Instagram"
+	Category: Social Networking
+	Application Name: Instagram
+	Version: 7.7.2
+	Size: 22.2
+	Units: MB
+	Price: $0.00
+
+find price free "Social Networking"
+Free apps in category: "Social Networking"
+	Instagram
+
+find price free "Weather"
+Free apps in category: "Weather"
+
+find price free "Games"
+Category "Games" not found.

@@ -1,0 +1,22 @@
+1
+Weather
+2
+Weather
+AccuWeather
+8.5.4
+60.3
+MB
+6.00
+Weather
+The Weather Live
+4.6
+79
+MB
+1.99
+6
+range "Weather" price 5.00 10.00
+range "Weather" price 10.00 20.00
+range "Weather" app "A" "G"
+range "Games" app "A" "G"
+range "Games" price 5.00 10.00
+report
